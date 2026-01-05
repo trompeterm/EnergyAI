@@ -1,0 +1,31 @@
+.recommendation-card {
+    background-color: rgb(4, 86, 173);
+    width: 90%;
+    display: flex;
+    align-items: flex-start;
+    padding: 1rem;
+    margin: 1rem;
+}
+
+.drink-content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.drink-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.drink-description {
+    margin-top: 0.25rem;
+    font-size: 0.95rem;
+}
+
+.drink-percentage {
+    margin-left: auto;
+    font-size: 1.2rem;
+    font-weight: bold;
+    align-self: flex-start;
+}
