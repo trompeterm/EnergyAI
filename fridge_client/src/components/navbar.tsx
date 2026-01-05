@@ -5,6 +5,7 @@ export default function Navbar() {
         <div className="navbar"> 
             <p>EnergyAI</p>
             <ul>
+                <li><p>User: username</p></li>
                 <li><button>Leaderboard</button></li>
                 <li><button>Login</button></li>
             </ul>

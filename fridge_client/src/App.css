@@ -4,3 +4,15 @@
   padding: 2rem;
   text-align: center;
 }
+
+.button-div {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: space-evenly;
+  gap: 1rem;
+  top: 11.5vh;
+  left: 2vw;
+  width: 45%;
+}

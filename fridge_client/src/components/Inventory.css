@@ -1,0 +1,15 @@
+.inventory{
+    background-color: #96b7fa;
+    position: absolute;
+    top: 20vh;
+    left: 3vw;
+    width: 45%;
+    height: 78vh;
+    overflow-y: scroll;
+}
+
+.items {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
