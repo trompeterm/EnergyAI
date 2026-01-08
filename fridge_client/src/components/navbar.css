@@ -35,3 +35,15 @@
     align-self: center;
     padding-left: 1rem;
 }
+
+.title {
+    align-self: center;
+    padding: 0 1rem;
+    color: white;
+    font-size: 1.4rem; ;
+}
+
+.leaderboard-btn {
+    color: white;
+    font-size: 1.2rem;
+}
