@@ -7,11 +7,16 @@ import './Main.css'
 
 const Main = () => {
     const [inventory, setInventory] = useState<Record<string, number>>({});
+    const [recommendations, setRecommendations] = useState<Record<string, [number, string]>>({});
 
     useEffect(() => {
         fetch('http://localhost:8000/get_inventory')
             .then(response => response.json())
             .then(data => setInventory(data));
+
+        fetch('http://localhost:8000/get_recommendations')
+            .then(response => response.json())
+            .then(data => setRecommendations(data));
     }, []);
 
     return (
@@ -27,9 +32,9 @@ const Main = () => {
         ))}
       </InventoryDisplay>
       <RecommendationBox>
-        <Recommendation name="Drink 1" img_path="src/assets/sample_img.png" percentage={85} summary="You will like this drink a lot" />
-        <Recommendation name="Drink 2" img_path="src/assets/sample_img.png" percentage={70} summary="This snack is moderately energy efficient." />
-        <Recommendation name="Drink 3" img_path="src/assets/sample_img.png" percentage={90} summary="This drink is highly energy efficient, and you really like the flavor." />
+        {Object.entries(recommendations).map(([name, [percentage, summary]]) => (
+          <Recommendation key={name} name={name} img_path="src/assets/sample_img.png" percentage={percentage} summary={summary} />
+        ))}
       </RecommendationBox>
     </>
     )
