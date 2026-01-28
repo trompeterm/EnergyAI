@@ -7,14 +7,22 @@ const LoginButton = () => {
     return <button onClick={() => loginWithRedirect()}>Login</button>
 }
 
+const LogoutButton = () => {
+    const { logout } = useAuth0();
+    return <button onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })}>Logout</button>
+}
+
 export default function Navbar() {
+    const { user } = useAuth0();
+
     return (
             <div className="navbar"> 
                 <Link to='/' className='title'>EnergyAI</Link>
                 <ul>
                     <li><Link to='/leaderboard' className='leaderboard-btn'>Leaderboard</Link></li>
-                    <li><p>User: username</p></li>
+                    <li><p>User: {user?.name}</p></li>
                     <li><LoginButton /></li>
+                    <li><LogoutButton /></li>
                 </ul>
             </div>
     )
