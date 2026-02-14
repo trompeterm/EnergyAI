@@ -1,78 +1,185 @@
 .preferences-container {
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
+    max-width: 720px;
+    margin: 80px auto 40px;
+    padding: 0 24px;
+    text-align: left;
 }
 
 .preferences-container h1 {
-    padding: 20px;
-    margin: 0;
-    font-size: 28px;
-    font-weight: 600;
-    border-bottom: 2px solid #e0e0e0;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 0 0 8px;
+    color: #1a1a2e;
+}
+
+.preferences-container h1::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: #96b7fa;
+    border-radius: 2px;
+    margin-top: 10px;
 }
 
 .preferences-form {
-    flex: 1;
-    overflow-y: auto;
-    padding: 20px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 28px;
+    padding-top: 24px;
 }
 
+/* ── Section cards ── */
 .form-group {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px 24px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
     display: flex;
     flex-direction: column;
+    gap: 12px;
+}
+
+.form-group > label {
+    font-weight: 600;
+    font-size: 1rem;
+    color: #1a1a2e;
+    letter-spacing: 0.01em;
+}
+
+/* ── Checkbox grid ── */
+.checkbox-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+}
+
+.checkbox-item {
+    display: flex;
+    align-items: center;
     gap: 8px;
-}
-
-.form-group label {
-    font-weight: 500;
-    font-size: 16px;
-    color: #333;
-}
-
-.form-group select {
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    font-size: 14px;
-    background-color: #fff;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: #f4f6fb;
     cursor: pointer;
-    transition: border-color 0.2s;
+    transition: background 0.15s, box-shadow 0.15s;
 }
 
-.form-group select:hover {
-    border-color: #999;
+.checkbox-item:hover {
+    background: #e8edfa;
+    box-shadow: 0 0 0 1px #96b7fa;
 }
 
-.form-group select:focus {
+.checkbox-item input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #b0bec5;
+    border-radius: 4px;
+    cursor: pointer;
+    position: relative;
+    flex-shrink: 0;
+    transition: background 0.15s, border-color 0.15s;
+}
+
+.checkbox-item input[type="checkbox"]:checked {
+    background: #3a7bd5;
+    border-color: #3a7bd5;
+}
+
+.checkbox-item input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 1px;
+    width: 6px;
+    height: 10px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.checkbox-item label {
+    font-size: 0.9rem;
+    color: #333;
+    cursor: pointer;
+    user-select: none;
+}
+
+/* ── Text inputs ── */
+.form-group input[type="text"] {
+    padding: 10px 14px;
+    border: 1.5px solid #d5dce6;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    background: #f9fafb;
+    color: #1a1a2e;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-group input[type="text"]::placeholder {
+    color: #9aa5b4;
+}
+
+.form-group input[type="text"]:hover {
+    border-color: #96b7fa;
+}
+
+.form-group input[type="text"]:focus {
     outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+    border-color: #3a7bd5;
+    box-shadow: 0 0 0 3px rgba(58, 123, 213, 0.12);
+    background: #fff;
 }
 
+/* ── Submit button ── */
 .submit-button {
     align-self: flex-start;
-    padding: 12px 32px;
-    margin-top: 10px;
-    background-color: #007bff;
-    color: white;
+    padding: 12px 36px;
+    margin-top: 4px;
+    background: linear-gradient(135deg, #3a7bd5, #5a9bf5);
+    color: #fff;
     border: none;
-    border-radius: 6px;
-    font-size: 16px;
+    border-radius: 10px;
+    font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: transform 0.12s, box-shadow 0.2s, background 0.2s;
+    box-shadow: 0 2px 8px rgba(58, 123, 213, 0.25);
 }
 
 .submit-button:hover {
-    background-color: #0056b3;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(58, 123, 213, 0.35);
+    background: linear-gradient(135deg, #326cc4, #4a8be5);
 }
 
 .submit-button:active {
-    background-color: #003d82;
+    transform: translateY(0);
+    box-shadow: 0 1px 4px rgba(58, 123, 213, 0.2);
+}
+
+.submit-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.status-msg {
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin: 0;
+    padding: 10px 16px;
+    border-radius: 8px;
+}
+
+.status-msg.success {
+    color: #1b6e2d;
+    background: #e6f9ec;
+}
+
+.status-msg.error {
+    color: #9e2b2b;
+    background: #fce8e8;
 }

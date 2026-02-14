@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useAuth0 } from '@auth0/auth0-react'
 import './Preferences.css'
 
 interface Preferences {
@@ -10,6 +11,7 @@ interface Preferences {
 }
 
 const Preferences = () => {
+    const { user } = useAuth0()
     const [preferences, setPreferences] = useState<Preferences>({
         flavors: [],
         brand: [],
@@ -17,6 +19,8 @@ const Preferences = () => {
         caffeine: '',
         sugar: ''
     })
+    const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+    const [errorMsg, setErrorMsg] = useState('')
 
     const flavorOptions = ['Citrus', 'Berry', 'Tropical', 'Punch', 'Cola', 'Fruit']
     const brandOptions = ['Red Bull', 'Monster', 'Rockstar', 'Celsius', 'Bang', 'Reign']
@@ -39,9 +43,34 @@ const Preferences = () => {
         }))
     }
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        console.log('Survey submitted:', preferences)
+        setStatus('loading')
+        setErrorMsg('')
+
+        try {
+            const response = await fetch('http://localhost:8000/set_preferences', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    username: user?.email ?? '',
+                    flavor: preferences.flavors.join(', '),
+                    brand: preferences.brand.join(', '),
+                    sugar: preferences.sugar,
+                    caffeine: preferences.caffeine,
+                    calorie: preferences.calories
+                })
+            })
+
+            if (!response.ok) {
+                throw new Error(`Server error: ${response.status}`)
+            }
+
+            setStatus('success')
+        } catch (err) {
+            setStatus('error')
+            setErrorMsg(err instanceof Error ? err.message : 'Something went wrong')
+        }
     }
 
     return (
@@ -90,37 +119,41 @@ const Preferences = () => {
                         type="text"
                         id="calories"
                         name="calories"
-                        placeholder="e.g., Low, Medium, High"
+                        placeholder="e.g. 100"
                         value={preferences.calories}
                         onChange={handleTextChange}
                     />
                 </div>
 
                 <div className="form-group">
-                    <label htmlFor="caffeine">Preferred Caffeine</label>
+                    <label htmlFor="caffeine">Preferred Caffeine (mg)</label>
                     <input
                         type="text"
                         id="caffeine"
                         name="caffeine"
-                        placeholder="e.g., 100-150mg"
+                        placeholder="e.g. 60"
                         value={preferences.caffeine}
                         onChange={handleTextChange}
                     />
                 </div>
 
                 <div className="form-group">
-                    <label htmlFor="sugar">Preferred Sugar</label>
+                    <label htmlFor="sugar">Preferred Sugar (g)</label>
                     <input
                         type="text"
                         id="sugar"
                         name="sugar"
-                        placeholder="e.g., Sugar-Free"
+                        placeholder="e.g. 0"
                         value={preferences.sugar}
                         onChange={handleTextChange}
                     />
                 </div>
 
-                <button type="submit" className="submit-button">Submit</button>
+                <button type="submit" className="submit-button" disabled={status === 'loading'}>
+                    {status === 'loading' ? 'Saving...' : 'Submit'}
+                </button>
+                {status === 'success' && <p className="status-msg success">Preferences saved!</p>}
+                {status === 'error' && <p className="status-msg error">{errorMsg}</p>}
             </form>
         </div>
     )
