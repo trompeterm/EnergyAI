@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from data.supabase import SupabaseClient
 from services.rec import RecommendationService
+from services.inventory import InventoryManagerService
 
 app = FastAPI()
 
@@ -23,10 +24,23 @@ class PreferencesRequest(BaseModel):
 
 @app.get("/get_inventory")
 async def get_inventory():
+    inventory_service = InventoryManagerService()   
+    return inventory_service.get_inventory()
+
+@app.post("/add_item")
+async def add_item(drink_name: str):
+    inventory_service = InventoryManagerService()
+    inventory_service.add_item(drink_name)
     return {
-        "White Monster": 3,
-        "Peach Monster": 1,
-        "Red Bull": 9
+        "message": "Item added successfully"
+    }
+
+@app.post("/remove_item")
+async def remove_item(drink_name: str):
+    inventory_service = InventoryManagerService()
+    inventory_service.remove_item(drink_name)
+    return {
+        "message": "Item removed successfully"
     }
 
 @app.get("/get_recommendations")
