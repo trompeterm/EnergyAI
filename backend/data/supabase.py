@@ -10,6 +10,12 @@ class SupabaseClient:
         key = os.environ.get("SUPABASE_KEY")
         self.client = create_client(url, key)
 
+    def get_user_prefs(self, username):
+        result = self.client.table("user").select("*").eq("username", username).execute()
+        if result.data:
+            return result.data[0]
+        return None
+
     def set_user_prefs(self, username, flavor, brand, sugar, caffeine, calorie):
         self.client.table("user").upsert({
             "username": username,

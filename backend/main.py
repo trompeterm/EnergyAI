@@ -1,7 +1,8 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from data.supabase import SupabaseClient
+from services.rec import RecommendationService
 
 app = FastAPI()
 
@@ -28,14 +29,24 @@ async def get_inventory():
         "Red Bull": 9
     }
 
-#Drink name, Percent, Comment
 @app.get("/get_recommendations")
-async def get_recommendations():
-    return {
-        "Peach Monster": (96, "This drink matches your preferred flavor, sugar, and caffiene content."),
-        "White Monster": (85, "This drink matches your preferred sugar and caffiene content."),
-        "Red Bull": (70, "This drink matches your preferred caffiene content.")
-    }
+async def get_recommendations(username: str):
+    supabase = SupabaseClient()
+    prefs = supabase.get_user_prefs(username)
+
+    if not prefs:
+        raise HTTPException(status_code=404, detail="User preferences not found")
+
+    rec_service = RecommendationService()
+    recommendations = rec_service.get_recommendations(
+        flavor=prefs["flavor_preference"],
+        brand=prefs["brand_preference"],
+        sugar=prefs["sugar_preference"],
+        caffeine=prefs["caffeine_preference"],
+        calorie=prefs["calorie_preference"]
+    )
+
+    return recommendations
 
 @app.post("/set_preferences")
 async def set_preferences(prefs: PreferencesRequest):
